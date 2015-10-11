@@ -1,0 +1,83 @@
+<html>
+<head>
+<title> Placky - live network statistics - ver 0.1 </title>
+<style>
+.graph {
+	width: 95%;
+	height: 400px;
+	font-size: 14px;
+	line-height: 1.2em;
+}
+</style>
+<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.flot.js"></script>
+<script id="source" language="javascript" type="text/javascript">
+$(document).ready(function() {
+	var options = {
+		lines: { show: true },
+		points: { show: false },
+		xaxis: { mode: "time" },
+		yaxis: { ticks: 10 },
+		legend: { placement: "sw" }
+	};
+	var eth0_rx_packets = [];
+	var eth0_tx_packets = [];
+	var eth0_rx_bytes = [];
+	var eth0_tx_bytes = [];
+	var eth1_rx_packets = [];
+	var eth1_tx_packets = [];
+	var eth1_rx_bytes = [];
+	var eth1_tx_bytes = [];
+	var iteration = 0;
+	var packets = [
+		{ data: eth0_rx_packets, label: 'eth0 incoming packets' },
+		{ data: eth0_tx_packets, label: 'eth0 outgoing packets' },
+		{ data: eth1_rx_packets, label: 'eth1 incoming packets' },
+		{ data: eth1_tx_packets, label: 'eth1 outgoing packets' }
+	];
+	var bytes = [
+		{ data: eth0_rx_bytes, label: 'eth0 incoming Kbytes' },
+		{ data: eth0_tx_bytes, label: 'eth0 outgoing Kbytes' },
+		{ data: eth1_rx_bytes, label: 'eth1 incoming Kbytes' },
+		{ data: eth1_tx_bytes, label: 'eth1 outgoing Kbytes' }
+	];
+	$.plot("#packets-graph", packets, options);
+	$.plot("#bytes-graph", bytes, options);
+
+	function fetchData() {
+		++iteration;
+
+		function onDataReceived(series) {
+			$.merge(eth0_rx_packets, [series.eth0.rx_packets]);
+			$.merge(eth0_tx_packets, [series.eth0.tx_packets]);
+			$.merge(eth0_rx_bytes, [series.eth0.rx_bytes]);
+			$.merge(eth0_tx_bytes, [series.eth0.tx_bytes]);
+			$.merge(eth1_rx_packets, [series.eth1.rx_packets]);
+			$.merge(eth1_tx_packets, [series.eth1.tx_packets]);
+			$.merge(eth1_rx_bytes, [series.eth1.rx_bytes]);
+			$.merge(eth1_tx_bytes, [series.eth1.tx_bytes]);
+
+			$.plot("#packets-graph", packets, options);
+			$.plot("#bytes-graph", bytes, options);
+		}
+
+		$.ajax({
+			url: "traffic.pl",
+			method: 'GET',
+			dataType: 'json',
+			success: onDataReceived
+		});
+		setTimeout(fetchData, 1000);
+	}
+	fetchData();
+});
+
+
+
+</script>
+</head>
+<body>
+	<div id="packets-graph" class="graph"></div>
+	<div id="bytes-graph" class="graph"></div>
+</body>
+</html>

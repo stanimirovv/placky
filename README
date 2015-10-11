@@ -1,0 +1,13 @@
+
+Placky is simple Realtime interface monitoring system.
+
+It consists of a simple Perl script, which is used to generate JSON data and and a simple web page to display the current interface usage.
+
+Requirements:
+* Perl
+* JSON::XS perl module
+* jQuery (it comes with 1.11.3)
+* FlotCharts (it comes with 0.8.3)
+
+Installations:
+  Simply unpack it, configure the directories in install.sh and run ./install.sh
