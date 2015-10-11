@@ -1,5 +1,5 @@
 
-Placky is simple Realtime interface monitoring system.
+Placky is simple Realtime network interface monitoring system.
 
 It consists of a simple Perl script, which is used to generate JSON data and and a simple web page to display the current interface usage.
 
