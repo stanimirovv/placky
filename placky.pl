@@ -19,7 +19,7 @@ sub read_file {
 	my $content = 0;
 
 	if ( -f $save_file ) {
-		open my $read, '<', $save_file;
+		open my $read, '<', $save_file or die $!;
 		$save = <$read>;
 		close $read;
 	}
@@ -29,7 +29,7 @@ sub read_file {
 	close $file;
 	$content =~ s/[\r\n\s]*$//g;
 
-	open my $write, '>', $save_file;
+	open my $write, '>', $save_file or die $!;
 	print $write $content;
 	close $write; 
 	return $content - $save;
