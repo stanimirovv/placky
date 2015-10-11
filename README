@@ -1,6 +1,8 @@
 
 Placky is simple Realtime network interface monitoring system.
 
+It is meant as a simple web version of iptraf. More features will be added to it soon :)
+
 It consists of a simple Perl script, which is used to generate JSON data and and a simple web page to display the current interface usage.
 
 Requirements:
